@@ -17,9 +17,7 @@ def clean_data(df):
     # select the first row of the categories dataframe
     row = categories.head(1)
 
-    # use this row to extract a list of new column names for categories.
-    # one way is to apply a lambda function that takes everything 
-    # up to the second to last character of each string with slicing
+    # extract a list of new column names for categories.
     category_colnames = row.applymap(lambda x: x[:-2]).iloc[0,].tolist()
 
     # rename the columns of `categories`
@@ -32,6 +30,9 @@ def clean_data(df):
         
         # convert column from string to numeric
         categories[column] = categories[column].astype(int)
+
+    # related column max value is 2 we sould convert them to 1.
+    categories['related']=categories['related'].replace(2, 1)
 
     # drop the original categories column from `df`
     df = df.drop(['categories'], axis=1)
@@ -73,7 +74,7 @@ def main():
               'well as the filepath of the database to save the cleaned data '\
               'to as the third argument. \n\nExample: python process_data.py '\
               'disaster_messages.csv disaster_categories.csv '\
-              'DisasterResponse.db')
+              'disaster_response.db')
 
 
 if __name__ == '__main__':
